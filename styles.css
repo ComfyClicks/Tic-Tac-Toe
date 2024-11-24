@@ -1,12 +1,52 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  font-size: 45px;
+  width: 100%;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.scoreboard {
+  display: flex;
+  justify-content: center;
+  height: 100px;
+  width: 100%;
+}
+
 .board {
+  display: grid;
+  grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+  align-items: center;
+  justify-items: center;
+  padding: 4px;
+  gap: 4px;
   color: red;
   border: solid 2px black;
   height: 500px;
   width: 500px;
+  margin-bottom: 40px;
 }
 
 .cell {
   width: 150px;
   height: 150px;
   border: solid 1px black;
+  color: pink;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
 }
