@@ -1,0 +1,12 @@
+.board {
+  color: red;
+  border: solid 2px black;
+  height: 500px;
+  width: 500px;
+}
+
+.cell {
+  width: 150px;
+  height: 150px;
+  border: solid 1px black;
+}
