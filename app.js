@@ -3,7 +3,7 @@ const GameBoard = (function() {
 
   function createBoard() {
     board = Array(9).fill(null);
-    console.log(board);
+    console.log('created board', board);
   }
 
   function getBoard() {
@@ -70,7 +70,7 @@ const GameController = (function() {
   function handleWin() {
     updateScore();
     console.log(`${getCurrentPlayer().name} wins!`);
-    gameBoard.createBoard();
+    GameBoard.createBoard();
   }
 
   function makeMove(index) {
@@ -87,7 +87,6 @@ const GameController = (function() {
   }
 
   return { getCurrentPlayer, switchPlayer, updateScore, getScore, checkWinner, handleWin, makeMove };
-
 })();
 
 
@@ -97,7 +96,7 @@ const Display = (function() {
 
   function initializeBoard() {
     board.innerHTML = '';
-    GameBoard.getBoard().forEach((index) => {
+    GameBoard.getBoard().forEach((_, index) => {
       const cellDiv = document.createElement('div');
       cellDiv.classList.add('cell');
       cellDiv.textContent = '';
@@ -113,12 +112,13 @@ const Display = (function() {
 
   function updateBoard() {
     const cells = document.querySelectorAll('.cell');
-    GameBoard.getBoard().forEach((index) => {
+    GameBoard.getBoard().forEach((content, index) => {
       cells[index].textContent = content;
     });
   }
 
   return { initializeBoard, updateBoard }
 })();
+
 
 Display.initializeBoard();
