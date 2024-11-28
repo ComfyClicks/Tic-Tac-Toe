@@ -3,7 +3,6 @@ const GameBoard = (function() {
 
   function createBoard() {
     board = Array(9).fill(null);
-    console.log('created board', board);
   }
 
   function getBoard() {
@@ -44,6 +43,7 @@ const GameController = (function() {
 
   function switchPlayer() {
     currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
+    console.log(`It is now ${players[currentPlayerIndex].name}'s turn.`);
   }
 
   function updateScore() {
@@ -101,9 +101,11 @@ const Display = (function() {
       cellDiv.classList.add('cell');
       cellDiv.textContent = '';
       cellDiv.addEventListener('click', () => {
-        if (GameController.makeMove(index)) {
-          cellDiv.innerText = GameController.getCurrentPlayer().token;
+        if (GameBoard.getBoard()[index] === null){
+          GameController.makeMove(index);
           updateBoard();
+        } else {
+          console.log(`Cell ${index} is already occupied`);
         }
       });
       board.appendChild(cellDiv);
@@ -111,9 +113,10 @@ const Display = (function() {
   }
 
   function updateBoard() {
+    console.log(`GameBoard: `, GameBoard.getBoard());
     const cells = document.querySelectorAll('.cell');
-    GameBoard.getBoard().forEach((content, index) => {
-      cells[index].textContent = content;
+    GameBoard.getBoard().forEach((content, index) => {  
+      cells[index].textContent = content !== null? content : '';
     });
   }
 
