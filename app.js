@@ -70,7 +70,17 @@ const GameController = (function() {
   function handleWin() {
     updateScore();
     console.log(`${getCurrentPlayer().name} wins!`);
-    GameBoard.createBoard();
+    const leaderBoard = document.querySelector('.leaderboard');
+    leaderBoard.textContent = `${getCurrentPlayer().name} wins!`;
+    leaderBoard.style.display = 'block';
+
+    const replayBtn = document.querySelector('.replay-btn');
+    replayBtn.style.display = 'block';
+    replayBtn.addEventListener('click', () => {
+      GameBoard.createBoard();
+      Display.initializeBoard();
+      replayBtn.style.display = 'none';
+    })
   }
 
   function makeMove(index) {

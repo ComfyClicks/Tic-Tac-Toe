@@ -33,24 +33,30 @@ main {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  height: 100px;
+  height: 140px;
   width: 100%;
+  text-align: center;
+  align-items: center;
 }
 
 .leaderboard {
-
+  display: none;
+  color: var(--neon-green);
+  font-size: 36px;
 }
 
 .player-one {
   margin-left: 12%;
   margin-top: 3%;
   height: 100px;
+  font-size: 14px;
 }
 
 .player-two {
   margin-right: 12%;
   margin-top: 3%;
   height: 100px;
+  font-size: 14px;
 }
 
 .board {
@@ -80,7 +86,7 @@ main {
 }
 
 .cell:hover {
-  background-color: #333333; /* Slightly lighter background on hover */
+  background-color: #333333;
   box-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00; /* Glowing effect on hover */
 
 }
@@ -88,6 +94,35 @@ main {
 .cell:active {
   background-color: #d0d0d0;
   transform: scale(0.95);
+}
+
+.replay-div {
+  height: 100px;
+  display: flex;  
+}
+
+.replay-btn {
+  display: none;
+  height: 40px;
+  width: 140px;
+  background-color: var(--neon-green);
+  color: #1a1a1a;
+  border-radius: 7px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s, box-shadow 0.3s;
+}
+
+.replay-btn:hover {
+  background-color: #a6ff4d; /* Slightly lighter green on hover */
+  box-shadow: 0 0 10px var(--neon-green), 0 0 20px var(--neon-green); /* Glowing effect on hover */
+}
+
+.replay-btn:active {
+  background-color: #4dff1a; /* Even lighter green on click */
+  transform: scale(0.95);
+  box-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green); /* Reduced glowing effect on click */
 }
 
 footer {
