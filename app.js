@@ -70,17 +70,30 @@ const GameController = (function() {
   function handleWin() {
     updateScore();
     console.log(`${getCurrentPlayer().name} wins!`);
+
+    // Announces when a player wins
     const leaderBoard = document.querySelector('.leaderboard');
     leaderBoard.textContent = `${getCurrentPlayer().name} wins!`;
     leaderBoard.style.display = 'block';
 
+    // Updates the player's scores
+    const playerOneScore = document.querySelector('.player-one-score');
+    const playerTwoScore = document.querySelector('.player-two-score');
+    const currentPlayer = GameController.getCurrentPlayer().name;
+    currentPlayer === 'Player One' ? playerOneScore.textContent = GameController.getCurrentPlayer().score : playerTwoScore.textContent = GameController.getCurrentPlayer().score;
+
+    // Displays replay button when player wins
     const replayBtn = document.querySelector('.replay-btn');
     replayBtn.style.display = 'block';
     replayBtn.addEventListener('click', () => {
       GameBoard.createBoard();
       Display.initializeBoard();
       replayBtn.style.display = 'none';
-    })
+      leaderBoard.style.display = 'none';
+    });
+
+    // Update the board to show all plays
+    Display.updateBoard();
   }
 
   function makeMove(index) {
@@ -102,9 +115,17 @@ const GameController = (function() {
 
 const Display = (function() {
   GameBoard.createBoard();
+
+  const playerOneScore = document.querySelector('.player-one-score');
+  playerOneScore.textContent = GameController.getCurrentPlayer().score;
+
+  const playerTwoScore = document.querySelector('.player-two-score');
+  playerTwoScore.textContent = GameController.getCurrentPlayer().score;
+
   const board = document.querySelector('.board');
 
   function initializeBoard() {
+    console.log('Initializing board...');
     board.innerHTML = '';
     GameBoard.getBoard().forEach((_, index) => {
       const cellDiv = document.createElement('div');
