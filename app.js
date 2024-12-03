@@ -36,6 +36,7 @@ const GameController = (function() {
   ];
 
   let currentPlayerIndex = 0;
+  let isGameOver = false;
 
   function getCurrentPlayer() {
     return players[currentPlayerIndex];
@@ -67,6 +68,24 @@ const GameController = (function() {
     });
   }
 
+  function handleDraw() {
+    // Announces when a game is a draw;
+    const leaderBoard = document.querySelector('.leaderboard');
+    leaderBoard.textContent = 'Draw!';
+    leaderBoard.style.display = 'block';
+
+    // Displays replay button when game is a draw
+    const replayBtn = document.querySelector('.replay-btn');
+    replayBtn.style.display = 'block';
+    replayBtn.addEventListener('click', () => {
+      GameBoard.createBoard();
+      Display.initializeBoard();
+      replayBtn.style.display = 'none';
+      leaderBoard.style.display = 'none';
+      isGameOver = false;
+    });
+  }
+
   function handleWin() {
     updateScore();
     console.log(`${getCurrentPlayer().name} wins!`);
@@ -90,6 +109,7 @@ const GameController = (function() {
       Display.initializeBoard();
       replayBtn.style.display = 'none';
       leaderBoard.style.display = 'none';
+      isGameOver = false;
     });
 
     // Update the board to show all plays
@@ -97,19 +117,23 @@ const GameController = (function() {
   }
 
   function makeMove(index) {
+if (isGameOver) return;
+
     const currentPlayer = getCurrentPlayer();
     if (GameBoard.makeMove(index, currentPlayer.token)) {
       if (checkWinner()) {
         handleWin();
+        isGameOver = true;
       } else if (GameBoard.getBoard().every(cell => cell !== null)) {
         handleDraw();
+        isGameOver = false;
       } else {
         switchPlayer();
       }
     }
   }
 
-  return { getCurrentPlayer, switchPlayer, updateScore, getScore, checkWinner, handleWin, makeMove };
+  return { isGameOver, getCurrentPlayer, switchPlayer, updateScore, getScore, checkWinner, handleWin, makeMove };
 })();
 
 
@@ -132,6 +156,7 @@ const Display = (function() {
       cellDiv.classList.add('cell');
       cellDiv.textContent = '';
       cellDiv.addEventListener('click', () => {
+        if (GameController.isGameOver) return;
         if (GameBoard.getBoard()[index] === null){
           GameController.makeMove(index);
           updateBoard();
