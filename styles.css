@@ -16,8 +16,9 @@ body {
 header {
   display: flex;
   justify-content: center;
-  font-size: 45px;
+  font-size: 50px;
   font-weight: bold;
+  height: 100px;
   width: 100%;
   margin-top: 2%;
 }
@@ -47,16 +48,17 @@ main {
 .leaderboard {
   display: none;
   color: var(--neon-green);
-  font-size: 32px;
+  font-size: 28px;
   font-weight: bold;
   letter-spacing: -1px;
 }
 
 .players {
-  margin-top: 3%;
+  margin-top: 6%;
+  margin-bottom: 10%;
   height: 140px;
   width: 130px;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 #player-one {
