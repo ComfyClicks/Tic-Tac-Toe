@@ -1,3 +1,5 @@
+let isGameOver = false;
+
 const GameBoard = (function() {
   let board;
 
@@ -36,7 +38,6 @@ const GameController = (function() {
   ];
 
   let currentPlayerIndex = 0;
-  let isGameOver = false;
 
   function getCurrentPlayer() {
     return players[currentPlayerIndex];
@@ -68,47 +69,16 @@ const GameController = (function() {
     });
   }
 
-  function handleDraw() {
-    // Announces when a game is a draw;
-    const leaderBoard = document.querySelector('.leaderboard');
-    leaderBoard.textContent = 'Draw!';
-    leaderBoard.style.display = 'block';
-
-    // Displays replay button when game is a draw
-    const replayBtn = document.querySelector('.replay-btn');
-    replayBtn.style.display = 'block';
-    replayBtn.addEventListener('click', () => {
-      GameBoard.createBoard();
-      Display.initializeBoard();
-      replayBtn.style.display = 'none';
-      leaderBoard.style.display = 'none';
-      isGameOver = false;
-    });
-  }
-
   function handleWin() {
     updateScore();
     console.log(`${getCurrentPlayer().name} wins!`);
 
-    // Announces when a player wins
-    const leaderBoard = document.querySelector('.leaderboard');
-    leaderBoard.textContent = `${getCurrentPlayer().name} wins!`;
-    leaderBoard.style.display = 'block';
-
-    // Updates the player's scores
-    const playerOneScore = document.querySelector('.player-one-score');
-    const playerTwoScore = document.querySelector('.player-two-score');
-    const currentPlayer = GameController.getCurrentPlayer().name;
-    currentPlayer === 'Player One' ? playerOneScore.textContent = GameController.getCurrentPlayer().score : playerTwoScore.textContent = GameController.getCurrentPlayer().score;
-
-    // Displays replay button when player wins
-    const replayBtn = document.querySelector('.replay-btn');
-    replayBtn.style.display = 'block';
-    replayBtn.addEventListener('click', () => {
+  // Use Display module to handle UI updates
+    Display.showWinMessage(getCurrentPlayer().name);
+    Display.updateScores(GameController.getScore());
+    Display.showReplayButton(() => {
       GameBoard.createBoard();
       Display.initializeBoard();
-      replayBtn.style.display = 'none';
-      leaderBoard.style.display = 'none';
       isGameOver = false;
     });
 
@@ -117,36 +87,48 @@ const GameController = (function() {
   }
 
   function makeMove(index) {
-if (isGameOver) return;
+    if (isGameOver) return;
 
-    const currentPlayer = getCurrentPlayer();
-    if (GameBoard.makeMove(index, currentPlayer.token)) {
+    if (GameBoard.makeMove(index, getCurrentPlayer().token)) {
       if (checkWinner()) {
         handleWin();
         isGameOver = true;
       } else if (GameBoard.getBoard().every(cell => cell !== null)) {
-        handleDraw();
-        isGameOver = false;
+        Display.handleDraw();
+        isGameOver = true;
       } else {
         switchPlayer();
       }
     }
   }
 
-  return { isGameOver, getCurrentPlayer, switchPlayer, updateScore, getScore, checkWinner, handleWin, makeMove };
+  return { 
+    getCurrentPlayer,
+    switchPlayer,
+    updateScore,
+    getScore,
+    checkWinner,
+    handleWin,
+    makeMove };
 })();
 
 
 const Display = (function() {
   GameBoard.createBoard();
-
-  const playerOneScore = document.querySelector('.player-one-score');
-  playerOneScore.textContent = GameController.getCurrentPlayer().score;
-
-  const playerTwoScore = document.querySelector('.player-two-score');
-  playerTwoScore.textContent = GameController.getCurrentPlayer().score;
-
   const board = document.querySelector('.board');
+  const leaderBoard = document.querySelector('.leaderboard');
+  const cells = document.querySelectorAll('.cell');
+
+  function handleCellClick(event) {
+    const index = Array.from(board.children).indexOf(event.target);
+    console.log(`Cell ${index} clicked`);
+    if (GameBoard.getBoard()[index] === null) {
+      GameController.makeMove(index);
+      updateBoard();
+    } else {
+      console.log(`Cell ${index} is already occupied`)
+    }
+  }
 
   function initializeBoard() {
     console.log('Initializing board...');
@@ -155,29 +137,72 @@ const Display = (function() {
       const cellDiv = document.createElement('div');
       cellDiv.classList.add('cell');
       cellDiv.textContent = '';
-      cellDiv.addEventListener('click', () => {
-        if (GameController.isGameOver) return;
-        if (GameBoard.getBoard()[index] === null){
-          GameController.makeMove(index);
-          updateBoard();
-        } else {
-          console.log(`Cell ${index} is already occupied`);
-        }
-      });
+      cellDiv.addEventListener('click', handleCellClick);
       board.appendChild(cellDiv);
     });
   }
 
   function updateBoard() {
     console.log(`GameBoard: `, GameBoard.getBoard());
-    const cells = document.querySelectorAll('.cell');
-    GameBoard.getBoard().forEach((content, index) => {  
-      cells[index].textContent = content !== null? content : '';
+    const cells = document.querySelectorAll(".cell");
+    GameBoard.getBoard().forEach((content, index) => {
+      console.log(`Updating cell at index ${index} with player token ${content}`);
+      cells[index].textContent = content !== null ? content : '';
     });
   }
 
-  return { initializeBoard, updateBoard }
-})();
+  // Announces when a player wins
+  function showWinMessage(playerName) {
+    console.log(`${playerName} wins!`);
+    leaderBoard.textContent = `${playerName} wins!`;
+    leaderBoard.style.display = 'block';
+  }
 
+  // Announces when there's a draw
+  function showDrawMessage() {
+    console.log(`Draw!`);
+    leaderBoard.textContent = `Draw!`;
+    leaderBoard.style.display = 'block';
+  }
+  
+  // Updates the player's scores
+  function updateScores(score) {
+    const playerOneScore = document.querySelector('.player-one-score');
+    const playerTwoScore = document.querySelector('.player-two-score');
+    const currentPlayer = GameController.getCurrentPlayer().name;
+    currentPlayer === 'Player One' 
+    ? playerOneScore.textContent = score 
+    : playerTwoScore.textContent = score;
+  }
+
+  // Displays replay button when player wins
+  function showReplayButton(callback) {
+    const replayBtn = document.querySelector('.replay-btn');
+    replayBtn.style.display = 'block';
+    replayBtn.addEventListener('click', () => {
+      callback();
+      replayBtn.style.display = 'none';
+      leaderBoard.style.display = 'none';
+      isGameOver = false;
+    }, { once: true }); // Ensures the listener is added only once
+  }
+
+  function removeEventListeners() {
+    const cells = document.querySelectorAll('.cell');
+    cells.forEach(cell => {
+      cell.removeEventListener('click', handleCellClick);
+    });
+  }
+
+  return { 
+    initializeBoard,
+    updateBoard,
+    showWinMessage,
+    showDrawMessage,
+    updateScores,
+    showReplayButton,
+    removeEventListeners
+  };
+})();
 
 Display.initializeBoard();
