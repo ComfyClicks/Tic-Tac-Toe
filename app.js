@@ -86,6 +86,15 @@ const GameController = (function() {
     Display.updateBoard();
   }
 
+  function handleDraw() {
+    Display.showDrawMessage();
+    Display.showReplayButton(() => {
+      GameBoard.createBoard();
+      Display.initializeBoard();
+      isGameOver = false;
+    });
+  }
+
   function makeMove(index) {
     if (isGameOver) return;
 
@@ -94,8 +103,7 @@ const GameController = (function() {
         handleWin();
         isGameOver = true;
       } else if (GameBoard.getBoard().every(cell => cell !== null)) {
-        Display.handleDraw();
-        isGameOver = true;
+        handleDraw();
       } else {
         switchPlayer();
       }
