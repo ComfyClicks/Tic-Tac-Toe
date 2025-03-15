@@ -61,6 +61,23 @@ const GameController = (function() {
     return players[currentPlayerIndex].score;
   }
 
+  function hasPossibleWinningPlays() {
+    const winningCombinations = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+      [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+      [0, 4, 8], [2, 4, 6]             // Diagonals
+    ];
+    const board = GameBoard.getBoard();
+    return winningCombinations.some(combination => {
+      const [a, b, c] = combination;
+      return (
+        (board[a] === null || board[a] === board[b] || board[a] === board[c]) &&
+        (board[b] === null || board[b] === board[a] || board[b] === board[c]) &&
+        (board[c] === null || board[c] === board[a] || board[c] === board[b])
+      );
+    });
+  }
+
   function checkWinner() {
     const winningCombinations = [
       [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
@@ -119,6 +136,7 @@ const GameController = (function() {
     toggleStartingPlayer,
     updateScore,
     getScore,
+    hasPossibleWinningPlays,
     checkWinner,
     handleWin,
     makeMove };
@@ -136,6 +154,7 @@ const Display = (function() {
     if (GameBoard.getBoard()[index] === null) {
       GameController.makeMove(index);
       updateBoard();
+      event.target.classList.add('played');
       if (!isGameOver) {
         if (GameBoard.getBoard().every(cell => cell !== null)) {
           Display.showDrawMessage();

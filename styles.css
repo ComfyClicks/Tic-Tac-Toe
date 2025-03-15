@@ -3,12 +3,17 @@
   --dark-gray: #2e2e2e;
   --medium-gray: #4a4a4a;
   --light-gray: #6e6e6e;
+  --lighter-gray: #8a8a8a;
 }
 
 .wrapper {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
   flex: 1;
+  /* margin: auto; */
 }
 
 body {
@@ -24,10 +29,9 @@ body {
 header {
   display: flex;
   justify-content: center;
-  font-size: 50px;
+  font-size: 4rem;
   font-weight: bold;
-  height: 100px;
-  width: 100%;
+  width: 100vh;
   margin-top: 2%;
   color: var(--neon-green);
   text-shadow: 0 0 3px var(--neon-green), 0 0 1px var(--neon-green), 0 0 3px var(--neon-green);
@@ -36,6 +40,7 @@ header {
 main {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   width: 100%;
   flex: 1;
@@ -46,30 +51,27 @@ main {
   justify-content: space-between;
   margin: 0 auto;
   max-width: 500px;
-  padding: 0 1rem;
-  height: 180px;
-  gap: 3rem;
+  padding: 0 .9rem;
+  gap: 2rem;
   text-align: center;
   align-items: center;
 }
 
 .leaderboard {
   color: var(--neon-green);
-  font-size: 21px;
+  font-size: 1.1rem;
   letter-spacing: -1px;
-  width: 170px;
+  width: 180px;
 }
 
 .players {
-  margin-top: 6%;
-  margin-bottom: 10%;
-  height: 140px;
-  width: 130px;
-  font-size: 13px;
+  margin-bottom: 7%;
+  font-size: .9rem;
 }
 
 .players p {
-  font-size: 20px;
+  font-size: 1.5em;
+  padding-top: 30px;
 }
 
 .board {
@@ -97,6 +99,10 @@ main {
   text-align: center;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.1s;
+}
+
+.cell.played {
+  background-color: var(--lighter-gray);
 }
 
 .cell:hover {
