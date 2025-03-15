@@ -30,7 +30,7 @@ header {
   width: 100%;
   margin-top: 2%;
   color: var(--neon-green);
-  text-shadow: 0 0 2px var(--neon-green), 0 0 2px var(--neon-green), 0 0 3px var(--neon-green);
+  text-shadow: 0 0 3px var(--neon-green), 0 0 1px var(--neon-green), 0 0 3px var(--neon-green);
 }
 
 main {
@@ -43,25 +43,21 @@ main {
 
 .scoreboard {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
-  height: 140px;
-  width: 100%;
+  margin: 0 auto;
+  max-width: 500px;
+  padding: 0 1rem;
+  height: 180px;
+  gap: 3rem;
   text-align: center;
   align-items: center;
 }
 
-.scoreboard p {
-  font-size: 24px;
-}
-
 .leaderboard {
-  display: none;
   color: var(--neon-green);
-  padding: 50px;
-  font-size: 28px;
-  font-weight: bold;
+  font-size: 21px;
   letter-spacing: -1px;
+  width: 170px;
 }
 
 .players {
@@ -72,12 +68,8 @@ main {
   font-size: 13px;
 }
 
-#player-one {
-  margin-left: 12%;
-}
-
-#player-two {
-  margin-right: 12%;
+.players p {
+  font-size: 20px;
 }
 
 .board {
@@ -129,6 +121,7 @@ main {
   width: 140px;
   background-color: var(--neon-green);
   color: #1a1a1a;
+  margin-top: 50px;
   border-radius: 7px;
   border: none;
   font-size: 16px;

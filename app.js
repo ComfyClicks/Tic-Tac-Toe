@@ -26,12 +26,12 @@ const GameBoard = (function() {
 const GameController = (function() {
   const players = [
     {
-      name: 'Player One',
+      name: 'Player 1',
       token: 'X',
       score: 0,
     },
     {
-      name: 'Player Two',
+      name: 'Player 2',
       token: 'O',
       score: 0,
     },
@@ -46,6 +46,11 @@ const GameController = (function() {
   function switchPlayer() {
     currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
     console.log(`It is now ${players[currentPlayerIndex].name}'s turn.`);
+  }
+
+  // Alternates starting player
+  function toggleStartingPlayer() {
+    currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
   }
 
   function updateScore() {
@@ -111,6 +116,7 @@ const GameController = (function() {
   return { 
     getCurrentPlayer,
     switchPlayer,
+    toggleStartingPlayer,
     updateScore,
     getScore,
     checkWinner,
@@ -130,14 +136,22 @@ const Display = (function() {
     if (GameBoard.getBoard()[index] === null) {
       GameController.makeMove(index);
       updateBoard();
+      if (!isGameOver) {
+        if (GameBoard.getBoard().every(cell => cell !== null)) {
+          Display.showDrawMessage();
+        } else {
+          updateCurrentPlayer();
+        }
+      }
     } else {
-      console.log(`Cell ${index} is already occupied`)
+      console.log(`Cell ${index} is already occupied`);
     }
   }
 
   function initializeBoard() {
     console.log('Initializing board...');
     board.innerHTML = '';
+    leaderBoard.textContent = `${GameController.getCurrentPlayer().name}'s turn`;
     GameBoard.getBoard().forEach((_, index) => {
       const cellDiv = document.createElement('div');
       cellDiv.classList.add('cell');
@@ -153,6 +167,10 @@ const Display = (function() {
     GameBoard.getBoard().forEach((content, index) => {
       cells[index].textContent = content !== null ? content : '';
     });
+  }
+
+  function updateCurrentPlayer() {
+    leaderBoard.textContent = `${GameController.getCurrentPlayer().name}'s turn`;
   }
 
   // Announces when a player wins
@@ -184,9 +202,9 @@ const Display = (function() {
     const replayBtn = document.querySelector('.replay-btn');
     replayBtn.style.display = 'block';
     replayBtn.addEventListener('click', () => {
-      callback();   
+      GameController.toggleStartingPlayer();
+      callback();
       replayBtn.style.display = 'none';
-      leaderBoard.style.display = 'none';
       isGameOver = false;
     }, { once: true }); // Ensures the listener is added only once
   }
@@ -201,6 +219,7 @@ const Display = (function() {
   return { 
     initializeBoard,
     updateBoard,
+    updateCurrentPlayer,
     showWinMessage,
     showDrawMessage,
     updateScores,
