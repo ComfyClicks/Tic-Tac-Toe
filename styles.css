@@ -1,14 +1,22 @@
 :root {
   --neon-green: #00ff00;
+  --dark-gray: #2e2e2e;
+  --medium-gray: #4a4a4a;
+  --light-gray: #6e6e6e;
 }
 
 .wrapper {
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 body {
-  background-color: #0d0d0d;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--medium-gray);
   color: var(--neon-green); 
   font-family: 'Courier New', Courier, monospace; 
 }
@@ -21,14 +29,16 @@ header {
   height: 100px;
   width: 100%;
   margin-top: 2%;
+  color: var(--neon-green);
+  text-shadow: 0 0 2px var(--neon-green), 0 0 2px var(--neon-green), 0 0 3px var(--neon-green);
 }
 
 main {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   width: 100%;
+  flex: 1;
 }
 
 .scoreboard {
@@ -36,7 +46,7 @@ main {
   flex-direction: row;
   justify-content: space-between;
   height: 140px;
-  width: 90%;
+  width: 100%;
   text-align: center;
   align-items: center;
 }
@@ -48,6 +58,7 @@ main {
 .leaderboard {
   display: none;
   color: var(--neon-green);
+  padding: 50px;
   font-size: 28px;
   font-weight: bold;
   letter-spacing: -1px;
@@ -77,16 +88,17 @@ main {
   padding: 4px;
   gap: 4px;
   border: solid 2px var(--neon-green);
-  background-color: #1a1a1a;
+  background-color: var(--dark-gray);
   height: 450px;
   width: 450px;
-  margin-bottom: 40px;
+  margin: 20px auto;
 }
 
 .cell {
   width: 100%;
   height: 100%;
   border: solid 1px var(--neon-green);
+  background-color: var(--light-gray);
   color: var(--neon-green);
   font-size: 50px;
   align-content: center;
@@ -138,4 +150,33 @@ main {
 footer {
   display: flex;
   justify-content: center;
+  width: 100%;
+  padding: 10px 0;
+  margin-top: auto;
+}
+
+@keyframes pulsate {
+  0% {
+    text-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green), 0 0 15px var(--neon-green);
+  }
+  50% {
+    text-shadow: 0 0 10px var(--neon-green), 0 0 20px var(--neon-green), 0 0 30px var(--neon-green);
+  }
+  100% {
+    text-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green), 0 0 15px var(--neon-green);
+  }
+}
+
+footer a {
+  color: var(--neon-green);
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.3s, text-shadow 0.3s;
+  animation: pulsate 3s infinite;
+}
+
+footer a:hover,
+footer a:focus {
+  color: #a6ff4d; /* Slightly lighter green on hover */
+  text-shadow: 0 0 10px var(--neon-green), 0 0 20px var(--neon-green), 0 0 30px var(--neon-green);
 }

@@ -73,13 +73,12 @@ const GameController = (function() {
     updateScore();
     console.log(`${getCurrentPlayer().name} wins!`);
 
-  // Use Display module to handle UI updates
+    // Use Display module to handle UI updates
     Display.showWinMessage(getCurrentPlayer().name);
     Display.updateScores(GameController.getScore());
     Display.showReplayButton(() => {
       GameBoard.createBoard();
       Display.initializeBoard();
-      isGameOver = false;
     });
 
     // Update the board to show all plays
@@ -91,7 +90,6 @@ const GameController = (function() {
     Display.showReplayButton(() => {
       GameBoard.createBoard();
       Display.initializeBoard();
-      isGameOver = false;
     });
   }
 
@@ -125,7 +123,6 @@ const Display = (function() {
   GameBoard.createBoard();
   const board = document.querySelector('.board');
   const leaderBoard = document.querySelector('.leaderboard');
-  const cells = document.querySelectorAll('.cell');
 
   function handleCellClick(event) {
     const index = Array.from(board.children).indexOf(event.target);
@@ -154,7 +151,6 @@ const Display = (function() {
     console.log(`GameBoard: `, GameBoard.getBoard());
     const cells = document.querySelectorAll(".cell");
     GameBoard.getBoard().forEach((content, index) => {
-      console.log(`Updating cell at index ${index} with player token ${content}`);
       cells[index].textContent = content !== null ? content : '';
     });
   }
@@ -188,7 +184,7 @@ const Display = (function() {
     const replayBtn = document.querySelector('.replay-btn');
     replayBtn.style.display = 'block';
     replayBtn.addEventListener('click', () => {
-      callback();
+      callback();   
       replayBtn.style.display = 'none';
       leaderBoard.style.display = 'none';
       isGameOver = false;
