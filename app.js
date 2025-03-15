@@ -192,9 +192,11 @@ const Display = (function() {
     const playerOneScore = document.querySelector('.player-one-score');
     const playerTwoScore = document.querySelector('.player-two-score');
     const currentPlayer = GameController.getCurrentPlayer().name;
-    currentPlayer === 'Player One' 
-    ? playerOneScore.textContent = score 
-    : playerTwoScore.textContent = score;
+    if (currentPlayer === 'Player 1') {
+      playerOneScore.textContent = score;
+    } else {
+      playerTwoScore.textContent = score;
+    }
   }
 
   // Displays replay button when player wins
