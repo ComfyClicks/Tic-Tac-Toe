@@ -15,7 +15,6 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  margin: 0;
   background-color: var(--medium-gray);
   color: var(--neon-green); 
   font-family: 'Courier New', Courier, monospace; 
@@ -28,7 +27,7 @@ header {
   font-weight: bold;
   height: 100px;
   width: 100%;
-  margin-top: 2%;
+  margin-top: 2rem;
   color: var(--neon-green);
   text-shadow: 0 0 3px var(--neon-green), 0 0 1px var(--neon-green), 0 0 3px var(--neon-green);
 }
@@ -83,7 +82,6 @@ main {
   background-color: var(--dark-gray);
   height: 450px;
   width: 450px;
-  margin: 20px auto;
 }
 
 .cell {
@@ -121,7 +119,7 @@ main {
   width: 140px;
   background-color: var(--neon-green);
   color: #1a1a1a;
-  margin-top: 50px;
+  margin-top: 70px;
   border-radius: 7px;
   border: none;
   font-size: 16px;

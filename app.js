@@ -39,6 +39,12 @@ const GameController = (function() {
 
   let currentPlayerIndex = 0;
 
+  const winningCombinations = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+    [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+    [0, 4, 8], [2, 4, 6]             // Diagonals
+  ];
+
   function getCurrentPlayer() {
     return players[currentPlayerIndex];
   }
@@ -61,12 +67,25 @@ const GameController = (function() {
     return players[currentPlayerIndex].score;
   }
 
+  function hasPossibleWinningPlays() {
+    const board = GameBoard.getBoard();
+    
+    // Check if either player can still win
+    return players.some(player => {
+      const token = player.token;
+      
+      return winningCombinations.some(combination => {
+        const [a, b, c] = combination;
+        // A winning play is still possible if all cells in a combination
+        // are either empty or already contain the player's token
+        return (board[a] === null || board[a] === token) && 
+               (board[b] === null || board[b] === token) && 
+               (board[c] === null || board[c] === token);
+      });
+    });
+  }
+
   function checkWinner() {
-    const winningCombinations = [
-      [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-      [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-      [0, 4, 8], [2, 4, 6]             // Diagonals
-    ];
     const board = GameBoard.getBoard();
     return winningCombinations.some(combination => {
       const [a, b, c] = combination;
@@ -100,17 +119,20 @@ const GameController = (function() {
 
   function makeMove(index) {
     if (isGameOver) return;
-
+  
     if (GameBoard.makeMove(index, getCurrentPlayer().token)) {
       if (checkWinner()) {
         handleWin();
         isGameOver = true;
-      } else if (GameBoard.getBoard().every(cell => cell !== null)) {
+      } else if (!hasPossibleWinningPlays()) {
         handleDraw();
+        isGameOver = true;
       } else {
         switchPlayer();
       }
+      return true; // Return true to indicate successful move
     }
+    return false; // Return false if move couldn't be made
   }
 
   return { 
@@ -119,6 +141,7 @@ const GameController = (function() {
     toggleStartingPlayer,
     updateScore,
     getScore,
+    hasPossibleWinningPlays,
     checkWinner,
     handleWin,
     makeMove };
@@ -136,12 +159,9 @@ const Display = (function() {
     if (GameBoard.getBoard()[index] === null) {
       GameController.makeMove(index);
       updateBoard();
+      event.target.classList.add('played');
       if (!isGameOver) {
-        if (GameBoard.getBoard().every(cell => cell !== null)) {
-          Display.showDrawMessage();
-        } else {
-          updateCurrentPlayer();
-        }
+        updateCurrentPlayer();
       }
     } else {
       console.log(`Cell ${index} is already occupied`);
