@@ -80,8 +80,8 @@ main {
   gap: 4px;
   border: solid 2px var(--neon-green);
   background-color: var(--dark-gray);
-  height: 450px;
-  width: 450px;
+  height: 28rem;
+  width: 28rem;
 }
 
 .cell {
