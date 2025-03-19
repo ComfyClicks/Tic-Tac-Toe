@@ -61,6 +61,7 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+  align-content: center;
   color: var(--neon-green);
   font-size: 21px;
   letter-spacing: 1px;
