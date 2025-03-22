@@ -153,6 +153,44 @@ const Display = (function() {
   const board = document.querySelector('.board');
   const leaderBoard = document.querySelector('.leaderboard');
 
+  function changeNames() {
+    const playerName = document.querySelectorAll('.player-name');
+
+    playerName.forEach((element, index) => {
+      element.addEventListener('click', () => {
+        const currentName = element;
+        const nameInput = document.createElement('input');
+
+        // Set value for inputs
+        nameInput.value = element.textContent;
+
+        // Set attributes
+        nameInput.type = 'text';
+        nameInput.className = 'edit-name-input';
+        nameInput.placeholder = 'Enter Name';
+
+        element.textContent = '';
+        element.appendChild(nameInput);
+
+        nameInput.addEventListener('blur', handleBlur);
+
+        nameInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            handleSave();
+          }
+        });
+      })
+    });
+  }
+
+  function handleBlur() {
+    // Implementation for handling blur event
+  }
+  
+  function handleSave() {
+    // Implementation for saving the name
+  }
+
   function handleCellClick(event) {
     const index = Array.from(board.children).indexOf(event.target);
     console.log(`Cell ${index} clicked`);
@@ -239,6 +277,7 @@ const Display = (function() {
   }
 
   return { 
+    changeNames,
     initializeBoard,
     updateBoard,
     updateCurrentPlayer,
