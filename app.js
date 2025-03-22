@@ -99,7 +99,7 @@ const GameController = (function() {
 
     // Use Display module to handle UI updates
     Display.showWinMessage(getCurrentPlayer().name);
-    Display.updateScores(GameController.getScore());
+    Display.updateScores(currentPlayerIndex, GameController.getScore());
     Display.showReplayButton(() => {
       GameBoard.createBoard();
       Display.initializeBoard();
@@ -135,6 +135,13 @@ const GameController = (function() {
     return false; // Return false if move couldn't be made
   }
 
+  function updatePlayerName(playerIndex, newName) {
+    if (newName && newName.trim() !== '') {
+      players[playerIndex].name = newName.trim();
+    }
+    return players[playerIndex].name;
+  }  
+
   return { 
     getCurrentPlayer,
     switchPlayer,
@@ -144,7 +151,9 @@ const GameController = (function() {
     hasPossibleWinningPlays,
     checkWinner,
     handleWin,
-    makeMove };
+    makeMove,
+    updatePlayerName
+  };
 })();
 
 
@@ -161,7 +170,7 @@ const Display = (function() {
         const currentName = element;
         const nameInput = document.createElement('input');
 
-        // Set value for inputs
+        // Sets value for inputs to current name
         nameInput.value = element.textContent;
 
         // Set attributes
@@ -172,23 +181,35 @@ const Display = (function() {
         element.textContent = '';
         element.appendChild(nameInput);
 
-        nameInput.addEventListener('blur', handleBlur);
+        nameInput.focus();
+
+        nameInput.addEventListener('blur', () => {
+          savePlayerName(nameInput, element, index);
+        });
 
         nameInput.addEventListener('keydown', (e) => {
           if (e.key === 'Enter') {
-            handleSave();
+            savePlayerName(nameInput, element, index);
           }
         });
       })
     });
   }
 
-  function handleBlur() {
-    // Implementation for handling blur event
-  }
-  
-  function handleSave() {
-    // Implementation for saving the name
+  function savePlayerName(input, element, playerIndex) {
+    if (input && input.value.trim() !== '' && input.value.trim().length <= 15) {
+      const newName = input.value.trim();
+      GameController.updatePlayerName(playerIndex, newName);
+      element.textContent = newName;
+
+      // Update the leaderboard with the new player's name
+      if (!isGameOver) {
+        updateCurrentPlayer();
+      }
+    } else {
+      // If invalid input, revert to original name
+      element.textContent = GameController.getCurrentPlayer().name;
+    }
   }
 
   function handleCellClick(event) {
@@ -209,6 +230,7 @@ const Display = (function() {
   function initializeBoard() {
     console.log('Initializing board...');
     board.innerHTML = '';
+    changeNames();
     leaderBoard.textContent = `${GameController.getCurrentPlayer().name}'s turn`;
     GameBoard.getBoard().forEach((_, index) => {
       const cellDiv = document.createElement('div');
@@ -246,14 +268,11 @@ const Display = (function() {
   }
   
   // Updates the player's scores
-  function updateScores(score) {
-    const playerOneScore = document.querySelector('.player-one-score');
-    const playerTwoScore = document.querySelector('.player-two-score');
-    const currentPlayer = GameController.getCurrentPlayer().name;
-    if (currentPlayer === 'Player 1') {
-      playerOneScore.textContent = score;
+  function updateScores(playerIndex, score) {
+    if (playerIndex === 0) {
+      document.querySelector('.player-one-score').textContent = score;
     } else {
-      playerTwoScore.textContent = score;
+      document.querySelector('.player-two-score').textContent = score;
     }
   }
 
