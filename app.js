@@ -231,6 +231,10 @@ const Display = (function() {
     console.log('Initializing board...');
     board.innerHTML = '';
     changeNames();
+    leaderBoard.style.display = 'flex';
+    leaderBoard.style.justifyContent = 'center';
+    leaderBoard.style.alignItems = 'center';
+    leaderBoard.style.textAlign = 'center';
     leaderBoard.textContent = `${GameController.getCurrentPlayer().name}'s turn`;
     GameBoard.getBoard().forEach((_, index) => {
       const cellDiv = document.createElement('div');
